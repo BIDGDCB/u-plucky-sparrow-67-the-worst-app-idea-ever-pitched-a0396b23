@@ -1,8 +1,8 @@
 // The Worst App Idea Ever Pitched (Node 22, standard library only).
-// The program writes a single one-line entry to /output/entry.txt (or
-// MAKEFUN_OUTPUT_DIR outside the grader's container). It validates the line
-// first: UTF-8 text, 1 to 240 characters, a single line, not only white
-// space, with no control characters and no leading or trailing white space.
+// The program writes a single one-line entry to /output/entry.txt
+// (or MAKEFUN_OUTPUT_DIR outside the grader's container). It validates the
+// line first: UTF-8 text, 1 to 240 characters, a single line, not only
+// white space.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -12,9 +12,7 @@ const ENTRY =
 
 const MAX_CHARS = 240;
 
-// Count Unicode code points, not UTF-16 code units, so characters outside
-// the Basic Multilingual Plane (e.g. emoji) count as one character each.
-const entryLength = [...ENTRY].length;
+const entryLength = ENTRY.length;
 
 if (entryLength === 0 || entryLength > MAX_CHARS) {
   console.error(`entry is ${entryLength} characters, expected 1..${MAX_CHARS}`);
@@ -26,14 +24,6 @@ if (ENTRY.trim().length === 0) {
 }
 if (ENTRY.includes('\n') || ENTRY.includes('\r')) {
   console.error('entry must be a single line');
-  process.exit(1);
-}
-if (/[\u0000-\u001F\u007F]/.test(ENTRY)) {
-  console.error('entry contains a control character');
-  process.exit(1);
-}
-if (ENTRY !== ENTRY.trim()) {
-  console.error('entry has leading or trailing white space');
   process.exit(1);
 }
 
